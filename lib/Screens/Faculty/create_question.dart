@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Quiz/quiz_screen.dart';
-import '/Screens/Faculty/question.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '/models/quiz_model.dart';
 import '/constants.dart';
+import 'package:flutter_auth/Screens/Faculty/faculty_page.dart';
 
 List<Question> questions = [];
+late Quiz quiz;
 final TextEditingController questionName = TextEditingController();
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -26,14 +30,17 @@ class QuestionPage extends StatefulWidget {
 
 class _QuestionPageState extends State<QuestionPage> {
   static int qn = 0;
-  late List<TextEditingController> _options = List.generate(4, (i) => TextEditingController());
+  late List<TextEditingController> _options =
+      List.generate(4, (i) => TextEditingController());
   final TextEditingController _correctIndex = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Question",),
+        title: Text(
+          "Create Question",
+        ),
         backgroundColor: kPrimaryColor,
       ),
       body: Padding(
@@ -42,20 +49,24 @@ class _QuestionPageState extends State<QuestionPage> {
           child: Column(
             children: [
               Column(
-                children: questions.map(
+                children: questions
+                    .map(
                       (qn) => showQuestions(qn),
-                ).toList(),
+                    )
+                    .toList(),
               ),
               Container(
                 child: Row(
                   children: [
                     GestureDetector(
                       child: Icon(Icons.add),
-                      onTap: (){
+                      onTap: () {
                         _displayDialog();
                       },
                     ),
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Text(
                       "add questions",
                       style: setDefaultStyle(),
@@ -68,10 +79,27 @@ class _QuestionPageState extends State<QuestionPage> {
                   primary: kPrimaryColor,
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuizPage()));
+                  if (questions.length == 0) {
+                    Fluttertoast.showToast(
+                      msg: "Can't create a empty Quiz",
+                      // message
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: kPrimaryColor,
+                      webPosition: "Center",
+                      webBgColor:
+                          "linear-gradient(to bottom, #ff0000 100%, #ff0000 58%);",
+                    );
+                  } else {
+                    quiz = Quiz.constructor(dropDownValue, selectedBranch,
+                        quizName!, questions.length, questions);
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => QuizPage()));
+                  }
                 },
                 child: Text("Create Quiz",
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -83,50 +111,61 @@ class _QuestionPageState extends State<QuestionPage> {
       ),
     );
   }
-  Widget showQuestions(Question q){
+
+  Widget showQuestions(Question q) {
     int index = questions.indexOf(q);
     return Container(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Text("${index+1} )",
-                    style: setDefaultStyle()),
-                SizedBox(width: 10,),
-
-                Expanded(
-                  flex: 6,
-                  child: Text(q.question,
-                      style: setDefaultStyle(),
-                    softWrap: true,
-                  ),
-                ),
-                Spacer(),
-                GestureDetector(
-                  child: EditButton(questionNumber: qn, onPressed: buttonFunction , icon: Icon(Icons.edit,), ),
-                  // onTap: openEditMode(),
-                ),
-              ],
+            Text("${index + 1} )", style: setDefaultStyle()),
+            SizedBox(
+              width: 10,
             ),
-            const Divider(
-              thickness: 1,
-              color: Colors.grey,
+            Expanded(
+              flex: 6,
+              child: Text(
+                q.question,
+                style: setDefaultStyle(),
+                softWrap: true,
+              ),
             ),
-            SizedBox(height: 10,),
-            Column(
-              children: questions[index].options.map(
-                    (option) => showOptions(option),
-              ).toList(),
-            )
+            Spacer(),
+            GestureDetector(
+              child: EditButton(
+                questionNumber: qn,
+                onPressed: buttonFunction,
+                icon: Icon(
+                  Icons.edit,
+                ),
+              ),
+              // onTap: openEditMode(),
+            ),
           ],
+        ),
+        const Divider(
+          thickness: 1,
+          color: Colors.grey,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Column(
+          children: questions[index]
+              .options
+              .map(
+                (option) => showOptions(option),
+              )
+              .toList(),
         )
-    );
+      ],
+    ));
   }
 
-
-  Widget showOptions(String option){
-    return  Container(
+  Widget showOptions(String option) {
+    return Container(
       height: 50,
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.symmetric(vertical: 7.0),
@@ -149,13 +188,15 @@ class _QuestionPageState extends State<QuestionPage> {
       ),
     );
   }
-  TextStyle setDefaultStyle(){
+
+  TextStyle setDefaultStyle() {
     return TextStyle(
       fontSize: 19,
       fontWeight: FontWeight.bold,
       color: kPrimaryColor,
     );
   }
+
   Future<void> _editDialog(int id) async {
     Question currQn = questions[id];
     questionName.text = currQn.question;
@@ -170,7 +211,8 @@ class _QuestionPageState extends State<QuestionPage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Question',
+          title: Text(
+            'Edit Question',
             style: setDefaultStyle(),
           ),
           content: SingleChildScrollView(
@@ -181,17 +223,16 @@ class _QuestionPageState extends State<QuestionPage> {
                   decoration: const InputDecoration(hintText: 'Enter Question'),
                 ),
                 Column(
-                  children: _options.asMap().entries.map(
-                          (entry){
-                        int index = entry.key;
-                        var option = entry.value;
-                        return buildTextField(index, option);
-                      }
-                  ).toList(),
+                  children: _options.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    var option = entry.value;
+                    return buildTextField(index, option);
+                  }).toList(),
                 ),
                 TextField(
                   controller: _correctIndex,
-                  decoration: const InputDecoration(hintText: 'Enter Correct Option Index'),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter Correct Option Index'),
                 ),
               ],
             ),
@@ -206,14 +247,20 @@ class _QuestionPageState extends State<QuestionPage> {
                       _correctIndex.clear();
                       questionName.clear();
                       _options.clear();
-                      _options = List.generate(4, (i) => TextEditingController());
+                      _options =
+                          List.generate(4, (i) => TextEditingController());
                     });
                     Navigator.of(context).pop();
                   },
                 ),
-                SizedBox(width: 120,),
+                SizedBox(
+                  width: 120,
+                ),
                 TextButton(
-                  child: Text('Save', style: TextStyle(color: kPrimaryColor),),
+                  child: Text(
+                    'Save',
+                    style: TextStyle(color: kPrimaryColor),
+                  ),
                   onPressed: () {
                     _saveQuestion(id);
                     Navigator.of(context).pop();
@@ -226,8 +273,8 @@ class _QuestionPageState extends State<QuestionPage> {
       },
     );
   }
-  void _saveQuestion(int id){
 
+  void _saveQuestion(int id) {
     setState(() {
       questions[id].correctOptionsIndex = int.parse(_correctIndex.text);
       questions[id].question = questionName.text;
@@ -248,7 +295,8 @@ class _QuestionPageState extends State<QuestionPage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add Questions',
+          title: Text(
+            'Add Questions',
             style: setDefaultStyle(),
           ),
           content: SingleChildScrollView(
@@ -259,17 +307,16 @@ class _QuestionPageState extends State<QuestionPage> {
                   decoration: const InputDecoration(hintText: 'Enter Question'),
                 ),
                 Column(
-                  children: _options.asMap().entries.map(
-                          (entry){
-                        int index = entry.key;
-                        var option = entry.value;
-                        return buildTextField(index, option);
-                      }
-                  ).toList(),
+                  children: _options.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    var option = entry.value;
+                    return buildTextField(index, option);
+                  }).toList(),
                 ),
                 TextField(
                   controller: _correctIndex,
-                  decoration: const InputDecoration(hintText: 'Enter Correct Option Index'),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter Correct Option Index'),
                 ),
               ],
             ),
@@ -284,14 +331,20 @@ class _QuestionPageState extends State<QuestionPage> {
                       _correctIndex.clear();
                       questionName.clear();
                       _options.clear();
-                      _options = List.generate(4, (i) => TextEditingController());
+                      _options =
+                          List.generate(4, (i) => TextEditingController());
                     });
                     Navigator.of(context).pop();
                   },
                 ),
-                SizedBox(width: 120,),
+                SizedBox(
+                  width: 120,
+                ),
                 TextButton(
-                  child: Text('Add', style: TextStyle(color: kPrimaryColor),),
+                  child: Text(
+                    'Add',
+                    style: TextStyle(color: kPrimaryColor),
+                  ),
                   onPressed: () {
                     _addQuestion();
                     Navigator.of(context).pop();
@@ -304,16 +357,21 @@ class _QuestionPageState extends State<QuestionPage> {
       },
     );
   }
-  Widget buildTextField(int index, var option){
+
+  Widget buildTextField(int index, var option) {
     return TextField(
       controller: _options[index],
       decoration: const InputDecoration(hintText: 'Enter the option'),
     );
   }
-  void _addQuestion(){
+
+  void _addQuestion() {
     qn += 1;
     setState(() {
-      questions.add(Question(qn,questionName.text, _options.map((e) => e.text.toString()).toList(),
+      questions.add(Question.constructor(
+          qn,
+          questionName.text,
+          _options.map((e) => e.text.toString()).toList(),
           int.parse(_correctIndex.text)));
       _correctIndex.clear();
       questionName.clear();
@@ -321,8 +379,9 @@ class _QuestionPageState extends State<QuestionPage> {
       _options = List.generate(4, (i) => TextEditingController());
     });
   }
+
   buttonFunction(id) {
-    _editDialog(id-1);
+    _editDialog(id - 1);
   }
 }
 
@@ -331,14 +390,18 @@ class EditButton extends StatelessWidget {
   final Function(int) onPressed;
   final Icon icon;
 
-  EditButton({required this.questionNumber, required this.onPressed, required this.icon});
+  EditButton(
+      {required this.questionNumber,
+      required this.onPressed,
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-        onPressed: () {onPressed(this.questionNumber);},
-        backgroundColor: Colors.blue,
-        child: Icon(Icons.edit)
-    );
+        onPressed: () {
+          onPressed(this.questionNumber);
+        },
+        backgroundColor: kPrimaryLightColor,
+        child: Icon(Icons.edit, color: kPrimaryColor,));
   }
 }

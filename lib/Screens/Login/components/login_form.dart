@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../constants.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({
+  const  LoginForm({
     Key? key,
   }) : super(key: key);
 
@@ -21,14 +21,14 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _otpcontroller = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    // Initialize the package
-    emailAuth = new EmailAuth(
-      sessionName: "Login session",
-    );
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Initialize the package
+  //   emailAuth = new EmailAuth(
+  //     sessionName: "Login session",
+  //   );
+  // }
 
   bool verify() {
     return emailAuth.validateOtp(
@@ -55,7 +55,7 @@ class _LoginFormState extends State<LoginForm> {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.blue,
+      backgroundColor: kPrimaryColor,
       webPosition: "Center",
       webBgColor: "linear-gradient(to bottom, #ff0000 100%, #ff0000 58%);",
     );
@@ -108,7 +108,7 @@ class _LoginFormState extends State<LoginForm> {
            tag: "login_btn",
            child: ElevatedButton(
              onPressed: () {
-               if(true){
+               if(true || verify()){
                  if(_emailcontroller.text.length == 10){
                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuizPage()));
                  }

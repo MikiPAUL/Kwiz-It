@@ -1,7 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '/constants.dart';
 import '/Screens/Faculty/create_question.dart';
+
+String dropDownValue = '2018';
+String selectedBranch = 'it';
+String? quizName;
+String duration = "15 mins";
 
 class CreateQuiz extends StatelessWidget {
   const CreateQuiz({Key? key}) : super(key: key);
@@ -25,10 +30,6 @@ class QuizDetails extends StatefulWidget {
 class _QuizDetailsState extends State<QuizDetails> {
   final TextEditingController _controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String dropDownValue = '2018';
-  String? selectedBranch;
-  String? quizName;
-  String duration = "15 mins";
 
   // List of items in our dropdown menu
   var items = [
@@ -122,7 +123,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                   ),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: defaultPadding),
+                        const EdgeInsets.symmetric(horizontal: defaultPadding),
                     child: Divider(
                       thickness: 2,
                       color: kPrimaryColor,
@@ -175,7 +176,22 @@ class _QuizDetailsState extends State<QuizDetails> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                      if (quizName == null || quizName?.isEmpty == true) {
+                        Fluttertoast.showToast(
+                          msg: "Enter the quiz name",
+                          // message
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: kPrimaryColor,
+                          webPosition: "Center",
+                          webBgColor:
+                              "linear-gradient(to bottom, #ff0000 100%, #ff0000 58%);",
+                        );
+                      } else {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => MyApp()));
+                      }
                     },
                     child: Text(
                       "NEXT",
@@ -219,6 +235,9 @@ class _QuizDetailsState extends State<QuizDetails> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
             ),
+            onChanged: (val) {
+              quizName = val;
+            },
           ),
         ),
         Spacer(),

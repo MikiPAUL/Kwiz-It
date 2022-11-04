@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../constants.dart';
-import '../../models/quiz.dart';
+import '../../models/quiz_model.dart';
 import 'resultpage.dart';
+import 'package:flutter_auth/Screens/Faculty/create_question.dart';
 
 void main() => runApp(const QuizPage());
 
