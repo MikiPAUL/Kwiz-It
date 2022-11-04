@@ -21,14 +21,14 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _otpcontroller = TextEditingController();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Initialize the package
-  //   emailAuth = new EmailAuth(
-  //     sessionName: "Login session",
-  //   );
-  // }
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the package
+    emailAuth = new EmailAuth(
+      sessionName: "Login session",
+    );
+  }
 
   bool verify() {
     return emailAuth.validateOtp(
@@ -125,19 +125,7 @@ class _LoginFormState extends State<LoginForm> {
              ),
            ),
          ),
-         const SizedBox(height: defaultPadding),
-         // AlreadyHaveAnAccountCheck(
-         //   press: () {
-         //     Navigator.push(
-         //       context,
-         //       MaterialPageRoute(
-         //         builder: (context) {
-         //           return SignUpScreen();
-         //         },
-         //       ),
-         //     );
-         //   },
-         // ),
+         const SizedBox(height: defaultPadding)
        ],
      ),
    );

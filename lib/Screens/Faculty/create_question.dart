@@ -94,8 +94,14 @@ class _QuestionPageState extends State<QuestionPage> {
                 Text("${index+1} )",
                     style: setDefaultStyle()),
                 SizedBox(width: 10,),
-                Text(q.question,
-                    style: setDefaultStyle()),
+
+                Expanded(
+                  flex: 6,
+                  child: Text(q.question,
+                      style: setDefaultStyle(),
+                    softWrap: true,
+                  ),
+                ),
                 Spacer(),
                 GestureDetector(
                   child: EditButton(questionNumber: qn, onPressed: buttonFunction , icon: Icon(Icons.edit,), ),
