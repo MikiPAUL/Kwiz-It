@@ -6,7 +6,6 @@ String quizModelToJson(Quiz data) => json.encode(data.toJson());
 
 class Quiz {
   Quiz({
-    this.quizid,
     required this.batch,
     required this.branch,
     required this.quizName,
@@ -20,7 +19,6 @@ class Quiz {
       this.numberOfQuestions,
       this.listOfQuestions,);
 
-  String? quizid;
   String batch;
   String branch;
   String quizName;
@@ -28,7 +26,6 @@ class Quiz {
   List<Question> listOfQuestions;
 
   factory Quiz.fromJson(Map<String, dynamic> json) => Quiz(
-    quizid: json["quizid"],
     batch: json["batch"],
     branch: json["branch"],
     quizName: json["quizName"],
@@ -37,7 +34,6 @@ class Quiz {
   );
 
   Map<String, dynamic> toJson() => {
-    "quizid": quizid,
     "batch": batch,
     "branch": branch,
     "quizName": quizName,

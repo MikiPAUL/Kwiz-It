@@ -11,7 +11,7 @@ class LoginAndSignupBtn extends StatelessWidget {
     return Column(
       children: [
         Hero(
-          tag: "login_btn",
+          tag: "nothing",
           child: ElevatedButton(
             onPressed: () {
               Navigator.push(

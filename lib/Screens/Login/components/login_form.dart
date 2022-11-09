@@ -2,6 +2,7 @@ import 'package:email_auth/email_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Faculty/faculty_page.dart';
 import 'package:flutter_auth/Screens/Quiz/quiz_screen.dart';
+import 'package:flutter_auth/backend/firebase/quiz_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../constants.dart';
 
@@ -14,11 +15,11 @@ class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();
 }
 
+final TextEditingController emailcontroller = TextEditingController();
 class _LoginFormState extends State<LoginForm> {
   bool submitValid = false;
 
   late EmailAuth emailAuth;
-  final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _otpcontroller = TextEditingController();
 
   // @override
@@ -32,7 +33,7 @@ class _LoginFormState extends State<LoginForm> {
 
   bool verify() {
     return emailAuth.validateOtp(
-        recipientMail: _emailcontroller.value.text,
+        recipientMail: emailcontroller.value.text,
         userOtp: _otpcontroller.value.text);
   }
 
@@ -41,7 +42,7 @@ class _LoginFormState extends State<LoginForm> {
   void sendOtp() async {
    // String mailId = _emailcontroller.text + "@gmail.com";
     bool result = await emailAuth.sendOtp(
-        recipientMail: _emailcontroller.value.text, otpLength: 5);
+        recipientMail: emailcontroller.value.text, otpLength: 5);
     if (result) {
       setState(() {
         submitValid = true;
@@ -66,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
        children: [
          TextFormField(
            keyboardType: TextInputType.emailAddress,
-           controller: _emailcontroller,
+           controller: emailcontroller,
            textInputAction: TextInputAction.next,
            cursorColor: kPrimaryColor,
            onSaved: (email) {},
@@ -108,9 +109,9 @@ class _LoginFormState extends State<LoginForm> {
            tag: "login_btn",
            child: ElevatedButton(
              onPressed: () {
-               if(true || verify()){
-                 if(_emailcontroller.text.length == 10){
-                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuizPage()));
+               if(verify()){
+                 if(emailcontroller.text.length != 10){
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => GetQuiz("2020cs")));
                  }
                  else {
                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateQuiz()));
