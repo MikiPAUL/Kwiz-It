@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Screens/Faculty/show_leader_board.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '/constants.dart';
 import '/Screens/Faculty/create_question.dart';
@@ -269,21 +270,21 @@ class _QuizDetailsState extends State<QuizDetails> {
             leading: Icon(Icons.home),
             title: Text("Home"),
             onTap: () {
-              Navigator.pop(context);
+             // Navigator.pop(context);
             },
           ),
           ListTile(
             leading: Icon(Icons.settings),
             title: Text("Settings"),
             onTap: () {
-              Navigator.pop(context);
+              //Navigator.pop(context);
             },
           ),
           ListTile(
-            leading: Icon(Icons.group_add),
-            title: Text("Manage Group"),
+            leading: Icon(Icons.leaderboard),
+            title: Text("Show Leaderboard"),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push((MaterialPageRoute(builder: (context) => ShowLeaderBoard())));
             },
           ),
         ],

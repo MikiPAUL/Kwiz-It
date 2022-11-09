@@ -20,12 +20,14 @@ class _ResultPageState extends State<ResultPage> {
     return Scaffold(
       body: Column(
         children: [
-          Container(
-            alignment: Alignment.topLeft,
-            child: Image.asset(
-              'assets/images/main_top.png',
+          Expanded(
+            child: Container(
+              alignment: Alignment.topLeft,
+              child: Image.asset(
+                'assets/images/main_top.png',
+              ),
+              height: 100,
             ),
-            height: 100,
           ),
           Container(
             alignment: Alignment(0.0, 0.0),
@@ -59,15 +61,20 @@ class _ResultPageState extends State<ResultPage> {
                   ),
                 ),
                 SizedBox(height: 30,),
-                ElevatedButton(
-                    onPressed: () {
-                      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                    },
-                    child: Text(
-                      "Exit"
+
+                Container(
+                  height: 40,
+                  width: 70,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                      },
+                      child: Text(
+                        "Exit"
+                      ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateColor.resolveWith((states) => kPrimaryColor),
                     ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith((states) => kPrimaryColor),
                   ),
                 ),
                 Container(

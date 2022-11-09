@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Screens/Faculty/quiz_creation_success.dart';
+import 'package:flutter_auth/Screens/Login/components/login_form.dart';
 import 'package:flutter_auth/Screens/Quiz/quiz_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '/models/quiz_model.dart';
@@ -94,8 +97,10 @@ class _QuestionPageState extends State<QuestionPage> {
                   } else {
                     quiz = Quiz.constructor(dropDownValue, selectedBranch,
                         quizName!, questions.length, questions);
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => QuizPage()));
+                    final db = FirebaseFirestore.instance;
+                    addQuiz(db, quiz);
+                    addDetails(db, quiz);
+                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreationSuccess()));
                   }
                 },
                 child: Text("Create Quiz",
@@ -109,6 +114,39 @@ class _QuestionPageState extends State<QuestionPage> {
           ),
         ),
       ),
+    );
+  }
+  void addQuiz(var db, var quiz) async {
+    final docRef = db.collection('quiz');
+    var quizid = dropDownValue + selectedBranch;
+    await docRef.doc(quizid).set(quiz.toJson()).then(
+            (value) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreationSuccess())),
+        onError: (e) => showFailure());
+  }
+
+  void addDetails(var db, var quiz) async{
+    final facRef = db.collection('faculty');
+    var quizid = dropDownValue + selectedBranch;
+    var facdetails = {
+      "faculty_id": "${emailcontroller.text}",
+      "quizid": "quiz/${quizid}"
+    };
+    await facRef.doc().set(facdetails).then(
+            (value) => print("Faculty details uploaded successfully"),
+        onError: (e) => print("Failed to upload faculty details"));
+  }
+
+  void showFailure(){
+    Fluttertoast.showToast(
+      msg: "Failed to create Quiz, Try again!!!",
+      // message
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: kPrimaryColor,
+      webPosition: "Center",
+      webBgColor:
+      "linear-gradient(to bottom, #ff0000 100%, #ff0000 58%);",
     );
   }
 

@@ -1,8 +1,47 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/constants.dart';
 
-void main() => runApp(const MyApp());
+import 'firebase_options.dart';
+
+// void main() => runApp(const MyApp());
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  //getQuiz();
+  runApp(const MyApp());
+}
+
+
+
+// void getQuiz() async {
+//   final docRef = db.collection('quiz');
+//
+//   final query = docRef.where("correctOptionIndex", isEqualTo: 2);
+//
+//   for (var queryDocumentSnapshot in query.docs) {
+//     Map<String, dynamic> data = queryDocumentSnapshot.data();
+//     var name = data['question'];
+//     print(name);
+//   }
+//   // var collection = FirebaseFirestore.instance.collection('quiz');
+//   // var querySnapshot = await collection.get();
+//   // Question? q;
+//   // for (var queryDocumentSnapshot in querySnapshot.docs) {
+//   //   Map<String, dynamic> data = queryDocumentSnapshot.data();
+//   //   q = Question.fromJson(data);
+//   // }
+//   // print(q?.question);
+// }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
