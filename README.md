@@ -1,12 +1,5 @@
 <html>
   <head>
-    <style>
-      img{
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    </style>
   </head>
   <body>
     <h1>Quiz App for our department</h1>
