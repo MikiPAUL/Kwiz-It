@@ -3,6 +3,7 @@
   </head>
   <body>
     <h1>Quiz App for our department</h1>
+    <h2> Demo </h2>
     <p align="center"> 
       <img src="https://media.giphy.com/media/vUXpDIyU8Lx4fBRZwD/giphy.gif" width="300" height="500"/>
     </p>
