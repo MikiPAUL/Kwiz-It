@@ -6,8 +6,8 @@
     <h2> TechStack </h2>
     <p>
       <ul>
-          <li style="font-size:30px">Flutter</li>
-          <li style="font-size:30px">Firebase</li>
+          <li style="font-size:300px">Flutter</li>
+          <li style="font-size:300px">Firebase</li>
       </ul>
     </p>
     <h2> Demo </h2>
