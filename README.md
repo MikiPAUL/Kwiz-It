@@ -3,6 +3,11 @@
   </head>
   <body>
     <h1>Quiz App for our department</h1>
+    <h2> TechStack </h2>
+    <p>
+      <h3> Firebase </h3>
+      <h3> Flutter </h3>
+    </p>
     <h2> Demo </h2>
     <p align="center"> 
       <img src="https://media.giphy.com/media/vUXpDIyU8Lx4fBRZwD/giphy.gif" width="300" height="500"/>
